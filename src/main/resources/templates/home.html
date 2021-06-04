@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>Trang chính</title>
+<link rel="stylesheet" th:href="@{/css/style.css}" type="text/css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css">
+  <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+      crossorigin="anonymous"
+    />
+
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.js"></script>
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css"
+	rel="stylesheet" />
+
+
+
+	
+</head>
+<body>
+		<div class="container" >
+	<!--wrapper start-->
+	<div class="wrapper">
+		<!--header menu start-->
+		<div class="header">
+			<div class="header-menu">
+				<div class="title">
+					Clyn<span>Student</span>
+				</div>
+				<div class="sidebar-btn">
+					<i class="fas fa-bars"></i>
+				</div>
+				<ul>
+					
+				
+					<li><a class="fas fa-sign-out-alt" th:attr="href='/j_spring_security_logout'"></a></li>
+				</ul>
+			</div>
+		</div>
+		<!--header menu end-->
+		<!--sidebar start-->
+		<div class="sidebar">
+				<div class="sidebar-menu">
+				<div class="profile" style="text-align: center">
+					<img th:src="@{/images/1.jpg}" alt="" />
+						<p th:utext="${sv?.masv}"></p>
+					<p th:utext="${sv?.tensv}"></p>
+				</div>
+				<ul>
+					<li class="item"><a th:href="@{/sinhvien/dashboard}" class="menu-btn"> <i
+							class="fas fa-desktop"></i><span>Dashboard</span>
+					</a></li>
+					<li class="item" id="thongtinhoctap"><a href="#thongtinhoctap"
+						class="menu-btn"> <i class="fas fa-user-circle"></i><span>Thông tin học tập
+								<i class="fas fa-chevron-down drop-down"></i>
+						</span>
+					</a>
+						<div class="sub-menu">
+							<a th:href="@{/lichhoc}"><i class="fas fa-image"></i><span>Xem lịch học</span></a>
+							<a th:href="@{/bangdiem}"><i class="fas fa-address-card"></i><span>Xem điểm</span></a>
+						</div></li>
+					<li class="item" id="quanlihocphan"><a href="#quanlihocphan"
+						class="menu-btn"> <i class="fas fa-envelope"></i><span>Quản lí học phần
+								<i class="fas fa-chevron-down drop-down"></i>
+						</span>
+					</a>
+						<div class="sub-menu">
+							<a th:href="@{/dkLHPChoSV}"><i class="fas fa-envelope"></i><span>Đăng ký học phần</span></a>
+						</div></li>
+					<li class="item" id="settings"><a href="#settings"
+						class="menu-btn"> <i class="fas fa-cog"></i><span>Tra cứu
+								<i class="fas fa-chevron-down drop-down"></i>
+						</span>
+					</a>
+						<div class="sub-menu">
+							<a th:href="@{/congnosinhvien}"><i class="fas fa-lock"></i><span>Tra cứu công nợ</span></a>
+							<a href="#"><i class="fas fa-language"></i><span>Khác</span></a>
+						</div></li>
+					<li class="item"><a href="#" class="menu-btn"> <i
+							class="fas fa-info-circle"></i><span>About</span>
+					</a></li>
+				</ul>
+			</div>
+		</div>
+		<!--sidebar end-->
+		<div>
+		<!--main container start-->
+		<div class="main-container">
+		
+		   <div class="card">
+
+			<br><br>
+		      <div class="main__title" style="margin-left:1%;">
+            <div class="main__greeting">
+              <h1 style="font-weight:100;font-size:1.1rem;color:black">Xin chào</h1>
+              <p th:utext="${sv?.tensv}" style="font-weight:200;"></p>
+            </div>
+          </div>
+		   </div>
+		   <div class="card" style="text-align:center;">
+		 
+		   <div class="right" style="width:100%;">
+		   <div class="info">
+            <h3 style="font-weight:100;font-size:62px;text-align:left;">Thông tin cá nhân</h3>
+            <a class="link_form btn btn-lg btn-outline-primary mb-3" style="float: right	" th:href="@{/capnhatmatkhau}">Cập nhật mật khẩu</a>
+         
+            <br>
+            <br>
+             <br>
+            <br>
+            <div class="info_data">
+                 <div class="data">
+                    <h4>Mã sinh viên</h4>
+                    <p th:utext="${sv?.masv}"></p>
+                 </div>
+                 <div class="data">
+                   <h4>Tên sinh viên</h4>
+                    <p th:utext="${sv?.tensv}"></p>
+              </div>
+                 <div class="data">
+                   <h4>Giới tính</h4>
+                    <p th:utext="${sv?.gioitinh}"></p>
+              </div>
+            </div>
+            <br>
+            <br>
+             <br>
+            <br>
+             <div class="info_data" style="padding-top:20px;">
+                 <div class="data">
+                    <h4>Ngày sinh</h4>
+                    <p th:utext="${#dates.format(sv?.ngaysinh,'dd-MM-yyyy')}"></p>
+                 </div>
+                 <div class="data">
+                   <h4>Lớp Học</h4>
+                    <p th:utext="${lhsv.tenlop}"></p>
+              </div>
+                 <div class="data">
+                   <h4>Ngành học</h4>
+                    <p th:utext="${cn.tennganh}"></p>
+              </div>
+                
+            
+            </div>
+            <br>
+             <br>
+            <br>
+             <br>
+               <div class="info_data" style="padding-top:20px;">
+                 <div class="data">
+                    <h4>Địa chỉ</h4>
+                    <p th:utext="${sv.diachi}"></p>
+                 </div>
+                 <div class="data">
+                   <h4>Email</h4>
+                    <p th:utext="${sv.email}"></p>
+              </div>
+                 <div class="data">
+                   <h4>Số điện thoại</h4>
+                    <p th:utext="${sv.sdt}"></p>
+              </div>
+            </div>
+        </div>
+		   </div>
+		   </div>
+		 
+		<div class="card">
+		          <div class="main__cards">
+		     <a th:href="@{/dkLHPChoSV}">
+            <div class="cardflex">
+              <i
+                class="fas fa-stream fa-2x text-lightblue"
+                aria-hidden="true"
+              ></i>
+              <div class="card_inner">
+                <p class="text-primary-p">Đăng ký học phần</p>
+                <span class="font-bold text-title"><i class="fas fa-arrow-right text-lightblue"></i></span>
+              </div>
+            </div>
+				</a>
+				<a th:href="@{/lichhoc}">
+            <div class="cardflex">
+              <i class="fa fa-calendar text-lightblue fa-2x" aria-hidden="true"></i>
+              <div class="card_inner">
+                <p class="text-primary-p">Xem lịch học, lịch thi</p>
+                <span class="font-bold text-title"><i class="fas fa-arrow-right text-lightblue"></i></span>
+              </div>
+            </div>
+				</a>
+				<a th:href="@{/bangdiem}">
+            <div class="cardflex">
+              <i
+                class="fas fa-clipboard fa-2x text-lightblue"
+                aria-hidden="true"
+              ></i>
+              <div class="card_inner">
+                <p class="text-primary-p">Kết quả học tập</p>
+                <span class="font-bold text-title"><i class="fas fa-arrow-right text-lightblue"></i></span>
+              </div>
+            </div>
+				</a>
+				<a th:href="@{/congnosinhvien}">
+            <div class="cardflex">
+              <i
+                class="fas fa-money-check-alt fa-2x text-lightblue"
+                aria-hidden="true"
+              ></i>
+              <div class="card_inner">
+                <p class="text-primary-p">Tra cứu công nợ</p>
+                <span class="font-bold text-title"><i class="fas fa-arrow-right text-lightblue"></i></span>
+              </div>
+            </div>
+            </a>
+          </div>
+		</div>
+		<div class="card" style="background:#2F323A;color:white;font-weight:normal;font-size:22px;text-align: center;padding-left:0px;">
+						<div class="title" style="font-size:22px;font-weight:900;">
+					CLYN<span style="color: #4CCEE8;">STUDENT</span>
+				</div>
+										<h5 style="font-weight:100;font-size:15px;">@Copyright by Clyn<span>Project</span> - 2021</h5>
+				
+				<h5 style="font-weight:100;font-size:12px;">Contact Us via email: tritranminhh@gmail.com - lamchanhdai@gmail.com</h5>
+						<br>
+			</div>
+
+
+		</div>
+		<!--main container end-->
+	</div>
+	<!--wrapper end-->
+</div>
+</div>
+<script type="text/javascript">
+		$(document).ready(function() {
+			$(".sidebar-btn").click(function() {
+				$(".wrapper").toggleClass("collapse");
+			});
+		});
+	</script>
+</body>
+</html>

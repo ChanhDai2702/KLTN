@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<title>Đăng ký học phần</title>
+<link rel="stylesheet" th:href="@{/css/style.css}" type="text/css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+	charset="utf-8"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script type='text/javascript'
+	src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'>
+</script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+ <script type="text/javascript" >
+
+ $(document).ready(function() { 
+	   $('input[type=radio]').change(function(){
+	        $("form[name='formMH&HP']").submit();
+	      
+	   });
+	  });
+ function test(url) {
+	 window.location = url.toString();
+
+	 }
+ </script>
+
+</head>
+<body>
+	<div class="container" >
+	<!--wrapper start-->
+	<div class="wrapper">
+		<!--header menu start-->
+		<div class="header">
+			<div class="header-menu">
+				<div class="title">
+					Clyn<span>Student</span>
+				</div>
+				<div class="sidebar-btn">
+					<i class="fas fa-bars"></i>
+				</div>
+				<ul>
+	
+					<li><a class="fas fa-sign-out-alt" th:attr="href='/j_spring_security_logout'"></a></li>
+				</ul>
+			</div>
+		</div>
+		<!--header menu end-->
+		<!--sidebar start-->
+		<div class="sidebar">
+				<div class="sidebar-menu">
+				<div class="profile" style="text-align: center">
+					<img th:src="@{/images/1.jpg}" alt="" />
+						<p th:utext="${sv?.masv}"></p>
+					<p th:utext="${sv?.tensv}"></p>
+				</div>
+				<ul>
+					<li class="item"><a th:href="@{/sinhvien/dashboard}" class="menu-btn"> <i
+							class="fas fa-desktop"></i><span>Dashboard</span>
+					</a></li>
+					<li class="item" id="thongtinhoctap"><a href="#thongtinhoctap"
+						class="menu-btn"> <i class="fas fa-graduation-cap"></i><span>Thông tin học tập
+								<i class="fas fa-chevron-down drop-down"></i>
+						</span>
+					</a>
+						<div class="sub-menu">
+							<a th:href="@{/lichhoc}"><i class="fas fa-calendar"></i><span>Xem lịch học</span></a>
+							<a th:href="@{/bangdiem}"><i class="fas fa-clipboard"></i><span>Xem điểm</span></a>
+						</div></li>
+					<li class="item" id="quanlihocphan"><a href="#quanlihocphan"
+						class="menu-btn"> <i class="fas fa-bookmark"></i><span>Quản lí học phần
+								<i class="fas fa-chevron-down drop-down"></i>
+						</span>
+					</a>
+						<div class="sub-menu">
+							<a th:href="@{/dkLHPChoSV}"><i class="fas fa-stream"></i><span>Đăng ký học phần</span></a>
+						</div></li>
+					<li class="item" id="settings"><a href="#settings"
+						class="menu-btn"> <i class="fas fa-search"></i><span>Tra cứu
+								<i class="fas fa-chevron-down drop-down"></i>
+						</span>
+					</a>
+						<div class="sub-menu">
+							<a th:href="@{/congnosinhvien}"><i class="fas fa-money-check-alt"></i><span>Tra cứu công nợ</span></a>
+							<a href="#"><i class="fas fa-language"></i><span>Khác</span></a>
+						</div></li>
+					<li class="item"><a href="#" class="menu-btn"> <i
+							class="fas fa-info-circle"></i><span>About</span>
+					</a></li>
+				</ul>
+			</div>
+		</div>
+		<!--sidebar end-->
+		<div>
+		<!--main container start-->
+		<div class="main-container">
+		<form th:object=${listNienKhoa} th:method="post" th:action="@{/getLHPByMonHoc}" name="formMH&HP">
+			<div class="card">
+			<div class="right" style="width:100%;">
+				<div class="info">
+				<h1 style="text-align: left;font-size:62px;font-weight:100;">Đăng ký lớp học phần</h1>
+				</div>
+				</div>
+				<div class="dropdown">
+					
+					
+					<select class="dropdown-select" onchange="this.form.submit()" name="HKnienKhoa" >
+							<option class="dropdown-list__item" value="" disabled selected >-Chọn học kỳ-</option>
+						
+								<option class="dropdown-list__item" th:each="nienkhoa : ${listNienKhoa}" th:value="${nienkhoa?.id}" th:selected="${nienkhoa.id eq lastselected}" th:utext="${nienkhoa.hocKy.loaiHocKy+' ('+nienkhoa.Khoa+')'}"></option>
+							
+		
+							
+					</select>
+					<span class="custom-arrow"></span>
+				</div>
+			</div>
+			
+			<div class="card">
+				<h1 style="font-weight:normal;font-size:42px;font-weight:100;"> Danh sách môn học chờ đăng ký </h1>
+				<br>
+				<br>
+				<table class="content-table">
+					<thead>
+						<tr>
+							<th></th>
+							<th>STT</th>
+							<th>Mã môn học</th>
+							<th>Tên môn học</th>
+							<th>Số tín chỉ</th>
+							<th>Bắt buộc</th>
+							<th>Học kì môn học</th>
+							<th>Môn học tiên quyết</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="monhoc,state :${dsmhByHocKi}">
+							<td>
+							
+								<div th:if="${monhoc?.mamonhoc}==${check}">
+									<input type="radio" th:filed="${monhoc?.mamonhoc}"th:value="${monhoc?.mamonhoc}" name="chon"th:checked="${monhoc?.mamonhoc}" /> 
+									<input type="hidden" th:filed="${monhoc?.mamonhoc}" th:value="${monhoc?.mamonhoc}">
+								</div>
+								<div th:unless="${monhoc?.mamonhoc}==${check}">
+									<input type="radio" th:filed="${monhoc?.mamonhoc}"th:value="${monhoc?.mamonhoc}" name="chon" /> 
+									<input type="hidden" th:filed="${monhoc?.mamonhoc}"th:value="${monhoc?.mamonhoc}">
+
+								</div>
+							
+							</td>
+							<td th:utext="${state.count}"></td>
+							<td th:utext="${monhoc?.mamonhoc}"></td>
+							<td th:utext="${monhoc?.tenmon}"></td>
+							<td th:utext="${monhoc?.sotinchi}"></td>
+							
+							<td></td>
+							<td th:utext="${monhoc?.hocky}"></td>
+							<td th:utext="${monhoc?.monhoc?.tenmon}"></td>
+							
+						</tr>
+
+					</tbody>
+				</table>
+				
+			</div>
+					
+			<div class="card">
+			<h1 style="font-weight:normal;font-size:42px;font-weight:100;"> Lớp học phần chờ đăng ký </h1>
+			
+			<br>
+			<br>
+			
+				<table class="content-table" id="tableLHP" style="float: left;margin-right: 3%">
+					<thead>
+						<tr>
+							<th></th>
+							<th>STT</th>
+							<th>Mã lớp</th>
+							<th>Thông tin lớp</th>
+							<th>Môn học</th>
+							<th>Giảng viên</th>
+							<th>Số học sinh đã đăng kí</th>
+							<th>Trạng thái</th>
+							
+							
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="lhp,state :${lophoc}">
+							<td>
+				   				 <div th:if="${lhp?.malophp}==${checkLHP}">
+									<input type="radio" name="chonLHP" th:filed="${lhp?.malophp}"th:value="${lhp?.malophp}" th:checked="${lhp?.malophp}"/>
+									<input type="hidden" th:filed="${lhp?.malophp}" th:value="${lhp?.malophp}">
+				    			</div>
+				<div th:unless="${lhp?.malophp}==${checkLHP}">
+						<input type="radio" th:filed="${lhp?.malophp}"th:value="${lhp?.malophp}" name="chonLHP" /> 
+						<input type="hidden" th:filed="${lhp?.malophp}"th:value="${lhp?.malophp}">
+				</div>
+					</td>
+					<td th:utext="${state.count}"></td>
+					<td th:utext="${lhp.malophp}"></td>
+					<td th:utext="${lhp.tenlophp}"></td>
+					<td th:utext="${lhp.monHoc.tenmon}"></td>
+					<td th:utext="${lhp?.giangVien?.tengv}"></td>
+					<td th:utext="${lhp.dsDanKyLopHocPhans.size+'/'+lhp.siso}"></td>
+					<td th:utext="${lhp.trangthai}"></td>
+			</tr>
+					</tbody>
+				</table>
+				<br>
+				<br>
+				<h1 style="font-weight:normal;font-size:42px;font-weight:100;"> Chi tiết lớp học phần </h1>
+				<br>
+				<br>
+					<table class="content-table" id="tableLichHoc">
+					<thead>
+						<tr>
+							<th></th>
+							<th></th>
+							<th>Ngày bắt đầu học</th>
+							<th>Ngày học trong tuần</th>
+							<th>Tiết học</th>
+							<th>Giảng viên</th>
+							<th>Phòng học</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="lich,state:${lichhoc}">
+						<td></td>
+						<td></td>
+						<td id="ngayhoc" th:utext="${#dates.format(lich.ngayhoc,'dd-MM-yyyy')}"></td>
+						<td >
+						<div th:if="${#strings.equals(lich.ngayhoctrongtuan,1)}">
+							<p>Chủ nhật</p>
+						</div>
+						<div th:if="${#strings.equals(lich.ngayhoctrongtuan,2)}">
+							<p>Thứ 2</p>
+						</div>
+						<div th:if="${#strings.equals(lich.ngayhoctrongtuan,3)}">
+							<p>Thứ 3</p>
+						</div>
+						<div th:if="${#strings.equals(lich.ngayhoctrongtuan,4)}">
+							<p>Thứ 4</p>
+						</div>
+						<div th:if="${#strings.equals(lich.ngayhoctrongtuan,5)}">
+							<p>Thứ 5</p>
+						</div>
+						<div th:if="${#strings.equals(lich.ngayhoctrongtuan,6)}">
+							<p>Thứ 6</p>
+						</div>
+						<div th:if="${#strings.equals(lich.ngayhoctrongtuan,7)}">
+							<p>Thứ 7</p>
+						</div>
+						</td>
+						<td th:utext="${lich.tiethocbatdau+'-'+lich.tiethocketthuc}"></td>
+						<td th:utext="${lich?.lophocPhan?.giangVien?.tengv}"></td>
+						<td th:utext=${lich?.phong?.tenphonghoc}></td>
+						</tr>
+					</tbody>
+					</table>
+					<br>
+					<br>
+				<input style="margin-right: 50%;" type="submit" class="btn-outline" name="action" id="btnDKHP" value="Đăng kí học phần"/>
+				
+		</div>
+		
+		<div class="card">
+		<h1 style="font-weight:normal;font-size:42px;font-weight:100;"> Danh sách học phần đã đăng ký trong kì này </h1>
+		<br>
+		<br>
+					<table class="content-table">
+					<thead>
+						<tr>
+							<th>STT</th>
+							<th>Mã lớp</th>
+							<th>Thông tin lớp</th>
+							<th>Môn học</th>
+							
+							<th>Học phí</th>
+							<th>Thu học phí</th>
+							<th>Trạng thái lớp học phần</th>
+							<th>Trạng thái đăng kí</th>
+							
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+					<tr th:each="dkhp,state:${listSVDKHPByNK}">
+					<td th:utext="${state.count}"></td>
+					<td th:utext="${dkhp.dangkylophocphan.malophp}"></td>
+					<td th:utext="${dkhp.dangkylophocphan.tenlophp}"></td>
+					<td th:utext="${dkhp.dangkylophocphan.monHoc.tenmon}"></td>
+					
+					<td th:utext="${dkhp.dangkylophocphan.hocphi}"></td>
+					<td th:utext="${dkhp.trangthaihocphi}"></td>
+					<td th:utext="${dkhp.dangkylophocphan.trangthai}"></td>
+					
+					<td th:utext="${dkhp.trangthaisinhvienmonhoc}"></td>
+				
+					<td><input type="submit" class="btn-outline" style="font-size:16px;align-items:center;width:100%;height:100%;" name="action" value="Hủy"/></td>
+					</tr>
+					</tbody>
+					</table>
+					
+				
+		</div>
+			</form>
+			<div class="card" style="background:#2F323A;color:white;font-weight:normal;font-size:22px;text-align: center;padding-left:0px;">
+							<div class="title" style="font-size:22px;font-weight:900;">
+					CLYN<span style="color: #4CCEE8;">STUDENT</span>
+				</div>
+										<h5 style="font-weight:100;font-size:15px;">@Copyright by Clyn<span>Project</span> - 2021</h5>
+				
+				<h5 style="font-weight:100;font-size:12px;">Contact Us via email: tritranminhh@gmail.com - lamchanhdai@gmail.com</h5>
+						<br>
+						
+						
+			</div>
+		</div>
+		<!--main container end-->
+	</div>
+	<!--wrapper end-->
+</div>
+</div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$(".sidebar-btn").click(function() {
+				$(".wrapper").toggleClass("collapse");
+			});
+		});
+	</script>
+	<script th:inline="javascript">
+	
+		document
+				.getElementById("btnDKHP")
+				.addEventListener(
+						"click",
+						function btnDKHPOnClick(event) {
+
+							/*<![CDATA[*/
+							var lichhocLHP = /*[[${lhp?.dsLichHoc}]]*/"";
+							var lhp = /*[[${lhp?.monHoc}]]*/"";
+							var dslhsv = /*[[${lichhocSV}]]*/"";
+							var listmhsvdk = /*[[${listMHSVDK}]]*/"";
+							var lhptrangthai=/*[[${lhp?.trangthai}]]*/"";
+							var lhpsiso=/*[[${lhp?.siso}]]*/"";
+							var siso=/*[[${lhp?.dsDanKyLopHocPhans}]]*/"";
+							/*]]>*/
+					
+						if (!isChoosed(lhp)) {
+								if (!validDataTrangThaiHP(lhptrangthai)) {
+									if(siso.length>=1){
+										swal(
+												"Si so day",
+												"Vui lòng chọn lớp học phần khác.",
+												"error");
+										event.preventDefault();
+									}
+									if (!validDataMH(lhp, listmhsvdk)) {
+										var a = 0;
+										for (var i = 0; i < dslhsv.length; i++) {
+											var lhsv = dslhsv[i].ngayhoctrongtuan;
+											var thbdsv = dslhsv[i].tiethocbatdau;
+											var thktsv = dslhsv[i].tiethocketthuc;
+											for (var j = 0; j < lichhocLHP.length; j++) {
+												if (lichhocLHP[j].ngayhoctrongtuan == lhsv) {
+													if ((lichhocLHP[j].tiethocbatdau >= thbdsv)
+															&& (lichhocLHP[j].tiethocketthuc <= thktsv)) {
+														a = 1;
+													}
+
+												}
+											}
+										}
+										if (a != 0) {
+											swal(
+													"Trùng lịch học",
+													"Vui lòng chọn lớp học phần khác.",
+													"error");
+											event.preventDefault();
+										}
+									}
+								}
+							} else{
+								swal("Đăng ký học phần thành công","","success");
+							}
+
+						});
+		function validDataMH(lhp, listmhsvdk) {
+			for (var i = 0; i < listmhsvdk.length; i++) {
+				var mhsv = listmhsvdk[i].mamonhoc;
+
+				if (mhsv == lhp.mamonhoc) {
+					swal(
+							"Môn học :" + " " + listmhsvdk[i].tenmon + " "
+									+ "đã được đăng kí",
+							" Vui lòng hủy lớp học phần hiện tại trước khi đăng kí lại",
+							"error");
+					event.preventDefault();
+				}
+			}
+		}
+		function validDataTrangThaiHP(lhptrangthai) {
+
+			if (lhptrangthai === "Đã khóa") {
+				swal("Lớp học phần trong trạng thái đã khóa",
+						" Không thể đăng kí vào lớp học phần này", "error");
+				event.preventDefault();
+			} else if (lhptrangthai === "chờ hủy lớp") {
+				swal("Lớp học phần trong trạng thái chờ hủy",
+						" Không thể đăng kí vào lớp học phần này", "error");
+				event.preventDefault();
+			}
+		}
+		function isChoosed(lhp) {
+			if (lhp === null) {
+				swal("Vui Lòng chọn lớp Học phần đăng ký","", "error");
+				event.preventDefault();
+			}
+		}
+	</script>
+</body>
+</html>
